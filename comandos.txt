@@ -1,0 +1,12 @@
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted
+
+.\venv\Scripts\activate
+
+pip install django
+
+django-admin startproject carsan .
+
+python manage.py runserver 
+
+python manage.py startapp tienda
