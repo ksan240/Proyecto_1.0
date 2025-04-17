@@ -1,7 +1,17 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-  <h1 class="mb-4">Bienvenido a la Tienda de Coches de Lujo</h1>
-  <p>Descubre marcas como Bugatti, Pagani, Ferrari, Lamborghini, McLaren y BMW.</p>
+<nav class="navbar navbar-expand-lg bg-white border-bottom">
+    <div class="container">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'ferrari' %}">Ferrari</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'pagani' %}">Pagani</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'lamborghini' %}">Lamborghini</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'mclaren' %}">McLaren</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'bmw' %}">BMW</a></li>
+      </ul>
+    </div>
+</nav>                
+<h1 class="mb-4">Bienvenido a la Tienda de Coches de Lujo</h1>
+<p>Descubre marcas como Bugatti, Pagani, Ferrari, Lamborghini, McLaren y BMW.</p>
 {% endblock %}
