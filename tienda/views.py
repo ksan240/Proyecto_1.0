@@ -26,14 +26,15 @@ def bmw(request):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return redirect('index')  # Redirige al inicio si el login es exitoso
         else:
-            return render(request, 'index.html', {'error': 'Credenciales inválidas'})
+            # Pasa un mensaje de error al contexto
+            return render(request, 'index.html', {'login_error': 'Usuario o contraseña incorrectos'})
     return redirect('index')
 
 # Vista del registro:
