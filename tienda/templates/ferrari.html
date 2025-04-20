@@ -1,6 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
 {% block content %}
-<h1 class="mb-4">Ferrari</h1>
-<p>Bienvenido a la página de Ferrari. Aquí encontrarás información sobre esta marca de lujo.</p>
+<div class="container my-4">
+  <h1 class="mb-4 text-center">Coches de Ferrari</h1>
+
+  <!-- Lista de coches -->
+  <div class="row">
+    {% for coche in coches %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          {% if coche.imagen %}
+            <img src="{{ coche.imagen.url }}" class="card-img-top" alt="{{ coche.modelo }}">
+          {% else %}
+            <img src="" class="card-img-top" alt="Sin imagen">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ coche.marca }} {{ coche.modelo }}</h5>
+            <p class="card-text"><strong>Año:</strong> {{ coche.año }}</p>
+            <p class="card-text"><strong>Precio:</strong> ${{ coche.precio }}</p>
+            <p class="card-text"><strong>País:</strong> {{ coche.pais }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

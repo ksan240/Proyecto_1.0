@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container my-4">
+  <h1 class="mb-4 text-center">Coches de {{ marca }}</h1>
+
+  <!-- Filtros -->
+  <form method="GET" action="" class="row g-3 mb-4">
+    <!-- Filtro por modelo -->
+    <div class="col-md-2">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="modeloDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Modelo
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="modeloDropdown">
+          <li><a class="dropdown-item" href="?modelo=488&{{ request.GET.urlencode }}">488</a></li>
+          <li><a class="dropdown-item" href="?modelo=Huracan&{{ request.GET.urlencode }}">Huracan</a></li>
+          <li><a class="dropdown-item" href="?modelo=Aventador&{{ request.GET.urlencode }}">Aventador</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Filtro por año mínimo -->
+    <div class="col-md-2">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="añoMinDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Año mínimo
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="añoMinDropdown">
+          <li><a class="dropdown-item" href="?año_min=2015&{{ request.GET.urlencode }}">2015</a></li>
+          <li><a class="dropdown-item" href="?año_min=2018&{{ request.GET.urlencode }}">2018</a></li>
+          <li><a class="dropdown-item" href="?año_min=2020&{{ request.GET.urlencode }}">2020</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Filtro por año máximo -->
+    <div class="col-md-2">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="añoMaxDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Año máximo
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="añoMaxDropdown">
+          <li><a class="dropdown-item" href="?año_max=2020&{{ request.GET.urlencode }}">2020</a></li>
+          <li><a class="dropdown-item" href="?año_max=2022&{{ request.GET.urlencode }}">2022</a></li>
+          <li><a class="dropdown-item" href="?año_max=2023&{{ request.GET.urlencode }}">2023</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Filtro por precio mínimo -->
+    <div class="col-md-2">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="precioMinDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Precio mínimo
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="precioMinDropdown">
+          <li><a class="dropdown-item" href="?precio_min=100000&{{ request.GET.urlencode }}">100,000</a></li>
+          <li><a class="dropdown-item" href="?precio_min=200000&{{ request.GET.urlencode }}">200,000</a></li>
+          <li><a class="dropdown-item" href="?precio_min=300000&{{ request.GET.urlencode }}">300,000</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Filtro por precio máximo -->
+    <div class="col-md-2">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="precioMaxDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Precio máximo
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="precioMaxDropdown">
+          <li><a class="dropdown-item" href="?precio_max=300000&{{ request.GET.urlencode }}">300,000</a></li>
+          <li><a class="dropdown-item" href="?precio_max=500000&{{ request.GET.urlencode }}">500,000</a></li>
+          <li><a class="dropdown-item" href="?precio_max=1000000&{{ request.GET.urlencode }}">1,000,000</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Filtro por país -->
+    <div class="col-md-2">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="paisDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          País
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="paisDropdown">
+          <li><a class="dropdown-item" href="?pais=Italia&{{ request.GET.urlencode }}">Italia</a></li>
+          <li><a class="dropdown-item" href="?pais=Alemania&{{ request.GET.urlencode }}">Alemania</a></li>
+          <li><a class="dropdown-item" href="?pais=Reino Unido&{{ request.GET.urlencode }}">Reino Unido</a></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+
+  <!-- Lista de coches -->
+  <div class="row">
+    {% for coche in coches %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          {% if coche.imagen %}
+            <img src="{{ coche.imagen.url }}" class="card-img-top" alt="{{ coche.modelo }}">
+          {% else %}
+            <img src="{% static 'placeholder.jpg' %}" class="card-img-top" alt="Sin imagen">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ coche.marca }} {{ coche.modelo }}</h5>
+            <p class="card-text"><strong>Año:</strong> {{ coche.año }}</p>
+            <p class="card-text"><strong>Precio:</strong> ${{ coche.precio }}</p>
+            <p class="card-text"><strong>País:</strong> {{ coche.pais }}</p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
