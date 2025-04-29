@@ -3,26 +3,6 @@
 {% block content %}
 <div class="container my-4">
   <h1 class="mb-4 text-center">Coches de Ferrari</h1>
-
-  <!-- Lista de coches -->
-  <div class="row">
-    {% for coche in coches %}
-      <div class="col-md-4 mb-4">
-        <!-- Enlace que envuelve toda la carta -->
-        <a href="{% url 'detalles_coche' coche.marca coche.id %}" class="text-decoration-none text-dark" style="text-decoration: none;">
-          <div class="card h-100">
-            {% if coche.imagen %}
-              <img src="{{ coche.imagen.url }}" class="card-img-top" alt="{{ coche.modelo }}">
-            {% else %}
-              <img src="{% static 'placeholder.jpg' %}" class="card-img-top" alt="Sin imagen">
-            {% endif %}
-            <div class="card-body">
-              <h5 class="card-title">{{ coche.marca }} {{ coche.modelo }}</h5>
-              <p class="card-text"><strong>Precio:</strong> ${{ coche.precio }}</p>
-            </div>
-          </div>
-        </a>
-      </div>
     {% endfor %}
   </div>
 </div>
