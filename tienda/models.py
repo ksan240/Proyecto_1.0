@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
 class Coche(models.Model):
     # Opciones para las marcas de coches
     OPCIONES_MARCA = [
@@ -18,7 +20,17 @@ class Coche(models.Model):
     pais = models.CharField(max_length=100)  # País de origen
     descripcion = models.TextField(blank=True, null=True)  # Descripción del coche
     imagen = models.ImageField(upload_to='coches/', blank=True, null=True)  # Imagen del coche
+    cantidad_disponible = models.PositiveIntegerField(default=0)  # Cantidad disponible
 
     # Representación en texto del coche
     def __str__(self):
         return f"{self.marca} {self.modelo} ({self.año})"
+    
+
+class Carrito(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    coche = models.ForeignKey(Coche, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.coche.marca} {self.coche.modelo} - {self.cantidad}"

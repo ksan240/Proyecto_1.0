@@ -83,9 +83,13 @@
           País
         </button>
         <ul class="dropdown-menu" aria-labelledby="paisDropdown">
-          <li><a class="dropdown-item" href="?pais=Italia&{{ request.GET.urlencode }}">Italia</a></li>
-          <li><a class="dropdown-item" href="?pais=Alemania&{{ request.GET.urlencode }}">Alemania</a></li>
-          <li><a class="dropdown-item" href="?pais=Reino Unido&{{ request.GET.urlencode }}">Reino Unido</a></li>
+          {% for opcion in paises %}
+            <li>
+              <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'pais' %}{{ key }}={{ value }}&{% endif %}{% endfor %}pais={{ opcion }}">
+                {{ opcion }}
+              </a>
+            </li>
+          {% endfor %}
         </ul>
       </div>
     </div>

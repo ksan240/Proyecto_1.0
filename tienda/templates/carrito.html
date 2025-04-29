@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Tu carrito</h1>
+<table>
+  <tr>
+    <th>Coche</th>
+    <th>Cantidad</th>
+    <th>Precio</th>
+  </tr>
+  {% for item in carrito_items %}
+  <tr>
+    <td>{{ item.coche.marca }} {{ item.coche.modelo }}</td>
+    <td>{{ item.cantidad }}</td>
+    <td>${{ item.coche.precio }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<h3>Total: ${{ total }}</h3>
+<a href="{% url 'checkout' %}">Finalizar compra</a>
+{% endblock %}

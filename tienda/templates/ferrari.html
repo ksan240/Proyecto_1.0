@@ -8,19 +8,20 @@
   <div class="row">
     {% for coche in coches %}
       <div class="col-md-4 mb-4">
-        <div class="card">
-          {% if coche.imagen %}
-            <img src="{{ coche.imagen.url }}" class="card-img-top" alt="{{ coche.modelo }}">
-          {% else %}
-            <img src="" class="card-img-top" alt="Sin imagen">
-          {% endif %}
-          <div class="card-body">
-            <h5 class="card-title">{{ coche.marca }} {{ coche.modelo }}</h5>
-            <p class="card-text"><strong>Año:</strong> {{ coche.año }}</p>
-            <p class="card-text"><strong>Precio:</strong> ${{ coche.precio }}</p>
-            <p class="card-text"><strong>País:</strong> {{ coche.pais }}</p>
+        <!-- Enlace que envuelve toda la carta -->
+        <a href="{% url 'detalles_coche' coche.marca coche.id %}" class="text-decoration-none text-dark" style="text-decoration: none;">
+          <div class="card h-100">
+            {% if coche.imagen %}
+              <img src="{{ coche.imagen.url }}" class="card-img-top" alt="{{ coche.modelo }}">
+            {% else %}
+              <img src="{% static 'placeholder.jpg' %}" class="card-img-top" alt="Sin imagen">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ coche.marca }} {{ coche.modelo }}</h5>
+              <p class="card-text"><strong>Precio:</strong> ${{ coche.precio }}</p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     {% endfor %}
   </div>

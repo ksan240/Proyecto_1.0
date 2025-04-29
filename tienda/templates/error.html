@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Error</h1>
+<p>{{ error_message }}</p>
+<a href="{% url 'view_cart' %}">Volver al carrito</a>
+{% endblock %}

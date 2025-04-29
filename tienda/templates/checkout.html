@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Finalizar compra</h1>
+<p>Total: ${{ total }}</p>
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit">Pagar con Stripe</button>
+</form>
+{% endblock %}
