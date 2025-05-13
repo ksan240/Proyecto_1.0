@@ -1,20 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Tu carrito</h1>
-<table>
-  <tr>
-    <th>Coche</th>
-    <th>Cantidad</th>
-    <th>Precio</th>
-  </tr>
-  {% for item in carrito_items %}
-  <tr>
-    <td>{{ item.coche.marca }} {{ item.coche.modelo }}</td>
-    <td>{{ item.cantidad }}</td>
-    <td>${{ item.coche.precio }}</td>
-  </tr>
-  {% endfor %}
-</table>
-<h3>Total: ${{ total }}</h3>
-<a href="{% url 'checkout' %}">Finalizar compra</a>
+<div class="container my-4">
+  <h1>Carrito</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in carrito_items %}
+      <tr>
+        <td>{{ item.coche.marca }}</td>
+        <td>{{ item.coche.modelo }}</td>
+        <td>{{ item.cantidad }}</td>
+        <td>${{ item.coche.precio }}</td>
+        <td>
+          <!-- Enlace para eliminar un coche específico -->
+          <a href="{% url 'remove_from_cart' item.coche.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="mt-4">
+    <h3>Total: ${{ total }}</h3>
+    <!-- boton cancelar todo el carrito -->
+    <a href="{% url 'cancel' %}" class="btn btn-warning">Cancelar</a>
+    <!-- boton finalizar compra -->
+    <a href="{% url 'checkout' %}" class="btn btn-success">Finalizar compra</a>
+  </div>
+</div>
 {% endblock %}

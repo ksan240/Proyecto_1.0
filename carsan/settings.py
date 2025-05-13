@@ -138,11 +138,7 @@ import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# SRIPE
+# STRIPE
 
 STRIPE_PUBLIC_KEY = 'pk_test_51RJJ8HRn3VZ4kH5ppGJK0Me17d3jjmIP7z4J4vAUn6I9iZaJzFTblSiJ3HI3VyB8yls0OW4Og4jRdaAOvmv2rfiI00VjQH9uLN'
 STRIPE_SECRET_KEY = 'sk_test_51RJJ8HRn3VZ4kH5p24irKwnDd85XpCURSFACjVClT4d9N6kRQhHhh7lsHrhFOygXMu9N7rkDacss29lAu7eplAnp009tBDdkIG'
-
-# En @login_required de views.py,  si un usuario sin loguearse intenta ver el carrito será redirigido al login
-
-LOGIN_URL = '/login/'

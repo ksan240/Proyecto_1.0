@@ -13,9 +13,13 @@
           Modelo
         </button>
         <ul class="dropdown-menu" aria-labelledby="modeloDropdown">
-          <li><a class="dropdown-item" href="?modelo=488&{{ request.GET.urlencode }}">488</a></li>
-          <li><a class="dropdown-item" href="?modelo=Huracan&{{ request.GET.urlencode }}">Huracan</a></li>
-          <li><a class="dropdown-item" href="?modelo=Aventador&{{ request.GET.urlencode }}">Aventador</a></li>
+          {% for modelo in modelos %}
+            <li>
+              <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'modelo' %}{{ key }}={{ value }}&{% endif %}{% endfor %}modelo={{ modelo }}">
+                {{ modelo }}
+              </a>
+            </li>
+          {% endfor %}
         </ul>
       </div>
     </div>
@@ -27,9 +31,9 @@
           Año mínimo
         </button>
         <ul class="dropdown-menu" aria-labelledby="añoMinDropdown">
-          <li><a class="dropdown-item" href="?año_min=2015&{{ request.GET.urlencode }}">2015</a></li>
-          <li><a class="dropdown-item" href="?año_min=2018&{{ request.GET.urlencode }}">2018</a></li>
-          <li><a class="dropdown-item" href="?año_min=2020&{{ request.GET.urlencode }}">2020</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2015">2015</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2018">2018</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2020">2020</a></li>
         </ul>
       </div>
     </div>
@@ -41,9 +45,9 @@
           Año máximo
         </button>
         <ul class="dropdown-menu" aria-labelledby="añoMaxDropdown">
-          <li><a class="dropdown-item" href="?año_max=2020&{{ request.GET.urlencode }}">2020</a></li>
-          <li><a class="dropdown-item" href="?año_max=2022&{{ request.GET.urlencode }}">2022</a></li>
-          <li><a class="dropdown-item" href="?año_max=2023&{{ request.GET.urlencode }}">2023</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2020">2020</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2022">2022</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2023">2023</a></li>
         </ul>
       </div>
     </div>
@@ -55,9 +59,9 @@
           Precio mínimo
         </button>
         <ul class="dropdown-menu" aria-labelledby="precioMinDropdown">
-          <li><a class="dropdown-item" href="?precio_min=100000&{{ request.GET.urlencode }}">100,000</a></li>
-          <li><a class="dropdown-item" href="?precio_min=200000&{{ request.GET.urlencode }}">200,000</a></li>
-          <li><a class="dropdown-item" href="?precio_min=300000&{{ request.GET.urlencode }}">300,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=100000">100,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=200000">200,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=300000">300,000</a></li>
         </ul>
       </div>
     </div>
@@ -69,9 +73,9 @@
           Precio máximo
         </button>
         <ul class="dropdown-menu" aria-labelledby="precioMaxDropdown">
-          <li><a class="dropdown-item" href="?precio_max=300000&{{ request.GET.urlencode }}">300,000</a></li>
-          <li><a class="dropdown-item" href="?precio_max=500000&{{ request.GET.urlencode }}">500,000</a></li>
-          <li><a class="dropdown-item" href="?precio_max=1000000&{{ request.GET.urlencode }}">1,000,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=300000">300,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=500000">500,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=1000000">1,000,000</a></li>
         </ul>
       </div>
     </div>
@@ -83,10 +87,10 @@
           País
         </button>
         <ul class="dropdown-menu" aria-labelledby="paisDropdown">
-          {% for opcion in paises %}
+          {% for pais in paises %}
             <li>
-              <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'pais' %}{{ key }}={{ value }}&{% endif %}{% endfor %}pais={{ opcion }}">
-                {{ opcion }}
+              <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'pais' %}{{ key }}={{ value }}&{% endif %}{% endfor %}pais={{ pais }}">
+                {{ pais }}
               </a>
             </li>
           {% endfor %}

@@ -62,10 +62,16 @@ def logout_view(request):
 
 # PARA LA GESTION DE LOS COCHES:
 
-
 def coches_por_marca(request, marca):
+
     # Filtrar coches por la marca proporcionada en la URL
     coches = Coche.objects.filter(marca=marca)
+
+    # Obtener modelos únicos de los coches filtrados
+    modelos = Coche.objects.filter(marca=marca).values_list('modelo', flat=True).distinct()
+
+    # Obtener países únicos de los coches filtrados
+    paises = Coche.objects.filter(marca=marca).values_list('pais', flat=True).distinct()
 
     # Filtrar por modelo
     modelo = request.GET.get('modelo')
@@ -93,10 +99,8 @@ def coches_por_marca(request, marca):
     if pais:
         coches = coches.filter(pais__icontains=pais)
 
-    paises = ['Italia', 'Alemania', 'Reino Unido']
-
     # Renderizar la plantilla genérica
-    return render(request, 'base2.html', {'coches': coches, 'marca': marca, 'paises': paises})
+    return render(request, 'base2.html', {'coches': coches, 'marca': marca, 'paises': paises, 'modelos': modelos})
 
 
 # PARA LA GESTION DEL CARRITO:
@@ -125,7 +129,6 @@ def add_to_cart(request, coche_id):
 
 # Ver el carrito
 
-
 def view_cart(request):
     if not request.user.is_authenticated:
         # Redirigir al inicio y mostrar el popup de login
@@ -136,6 +139,7 @@ def view_cart(request):
     return render(request, 'carrito.html', {'carrito_items': carrito_items, 'total': total})
 
 # Finalizar la compra
+
 def checkout(request):
     carrito_items = Carrito.objects.filter(user=request.user)
     total = sum(item.coche.precio * item.cantidad for item in carrito_items)
@@ -181,7 +185,21 @@ def success(request):
     return render(request, 'success.html')
 
 def cancel(request):
+    if not request.user.is_authenticated:
+        return redirect(f"{request.build_absolute_uri('/')}?show_login=true")
+
+    # Elimina todos los coches del carrito del usuario
+    Carrito.objects.filter(user=request.user).delete()
     return render(request, 'cancel.html')
+
+# Eliminar un coche del carrito
+
+def remove_from_cart(request, coche_id):
+    if not request.user.is_authenticated:
+        return redirect(f"{request.build_absolute_uri('/')}?show_login=true")
+
+    Carrito.objects.filter(user=request.user, coche_id=coche_id).delete()
+    return redirect('view_cart')  # Redirigir al carrito después de eliminar
 
 def error_view(request):
     return render(request, 'error.html', {'error_message': 'Ha ocurrido un error.'})
