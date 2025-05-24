@@ -148,6 +148,17 @@
               >
             </div>
             <div class="mb-3">
+              <label for="id_new_email" class="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                id="id_new_email"
+                name="email"
+                value="{{ register_form.email.value|default:'' }}"
+                required
+              >
+            </div>
+            <div class="mb-3">
               <label for="id_new_password1" class="form-label">Contraseña</label>
               <input
                 type="password"

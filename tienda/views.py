@@ -5,6 +5,8 @@ from .models import Coche, Carrito, Comentario
 import stripe
 from django.conf import settings
 from django.db.models import Q
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
 
 def index(request):
     query = request.GET.get('q', '')
@@ -52,16 +54,24 @@ def login_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('index')
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        email = request.POST.get('email')
+        if username and password1 and password2 and email:
+            if password1 != password2:
+                error = "Las contraseñas no coinciden."
+                return render(request, 'index.html', {'register_error': error})
+            if not User.objects.filter(username=username).exists():
+                User.objects.create_user(username=username, password=password1, email=email)
+                return redirect('index')
+            else:
+                error = "El usuario ya existe."
+                return render(request, 'index.html', {'register_error': error})
         else:
-            # Pasa los errores al contexto
-            return render(request, 'index.html', {'register_form': form, 'register_error': form.errors})
-    else:
-        form = UserCreationForm()
-    return render(request, 'index.html', {'register_form': form})
+            error = "Rellena todos los campos."
+            return render(request, 'index.html', {'register_error': error})
+    return render(request, 'index.html')
 
 # Vista del logout:
 
@@ -191,6 +201,14 @@ def success(request):
 
     # Limpiar el carrito después de la compra
     carrito_items.delete()
+    if request.user.is_authenticated and request.user.email:
+        send_mail(
+            '¡Gracias por tu compra!',
+            'Tu pedido ha sido recibido y está en proceso.',
+            settings.DEFAULT_FROM_EMAIL,
+            [request.user.email],
+            fail_silently=True,
+        )
     return render(request, 'success.html')
 
 def cancel(request):

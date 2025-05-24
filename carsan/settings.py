@@ -146,3 +146,13 @@ STRIPE_SECRET_KEY = 'sk_test_51RJJ8HRn3VZ4kH5p24irKwnDd85XpCURSFACjVClT4d9N6kRQh
 # para expirar la sesión por token CSRF desactualizado
 
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
+
+# para enviar correos de confirmación de compra
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'csantoyocm@gmail.com'
+EMAIL_HOST_PASSWORD = 'xnis ugsp oscx peyu'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
