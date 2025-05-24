@@ -1,7 +1,7 @@
 from django.shortcuts import render , redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from .models import Coche, Carrito
+from .models import Coche, Carrito, Comentario
 import stripe
 from django.conf import settings
 from django.db.models import Q
@@ -213,8 +213,40 @@ def remove_from_cart(request, coche_id):
 def error_view(request):
     return render(request, 'error.html', {'error_message': 'Ha ocurrido un error.'})
 
-# Views de las paginas con detalles de los coches:
+# Views de las paginas con detalles de los coches y comentarios:
 
 def detalles_coche(request, marca, coche_id):
     coche = get_object_or_404(Coche, id=coche_id, marca=marca)
-    return render(request, 'detalles_coche.html', {'coche': coche})
+    comentarios = coche.comentarios.all().order_by('-fecha')
+    puede_comentar = False
+    if request.user.is_authenticated:
+        num_comentarios = comentarios.filter(usuario=request.user).count()
+        puede_comentar = num_comentarios < 2 # es true sí num_comentarios < 2
+
+    if request.method == 'POST' and puede_comentar:
+        texto = request.POST.get('texto')
+        valoracion = request.POST.get('valoracion')
+        if texto and valoracion:
+            Comentario.objects.create(
+                coche=coche,
+                usuario=request.user,
+                texto=texto,
+                valoracion=valoracion
+            )
+            return redirect('detalles_coche', marca=marca, coche_id=coche_id)
+
+    return render(request, 'detalles_coche.html', {
+        'coche': coche,
+        'comentarios': comentarios,
+        'puede_comentar': puede_comentar
+    })
+
+def eliminar_comentario(request, comentario_id):
+    comentario = get_object_or_404(Comentario, id=comentario_id)
+    if request.user == comentario.usuario:
+        coche = comentario.coche
+        marca = coche.marca
+        coche_id = coche.id
+        comentario.delete()
+        return redirect('detalles_coche', marca=marca, coche_id=coche_id)
+    return redirect('index')

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="alert alert-warning mt-5 text-center">
+    <h2>¡Vaya!</h2>
+    <p>Por seguridad, tu sesión ha expirado o ha habido un problema con el formulario.</p>
+    <p><strong>Por favor, recarga la página e inténtalo de nuevo.</strong></p>
+    <a href="{% url 'index' %}" class="btn btn-primary mt-3">Volver al inicio</a>
+  </div>
+{% endblock %}

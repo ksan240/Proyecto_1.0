@@ -34,3 +34,13 @@ class Carrito(models.Model):
 
     def __str__(self):
         return f"{self.coche.marca} {self.coche.modelo} - {self.cantidad}"
+
+class Comentario(models.Model):
+    coche = models.ForeignKey(Coche, on_delete=models.CASCADE, related_name='comentarios')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField()
+    valoracion = models.PositiveSmallIntegerField(default=5)  # 1 a 5 estrellas
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario} - {self.valoracion}⭐"

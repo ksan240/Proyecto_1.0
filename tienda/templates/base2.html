@@ -31,8 +31,10 @@
           Año mínimo
         </button>
         <ul class="dropdown-menu" aria-labelledby="añoMinDropdown">
-          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2015">2015</a></li>
-          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2018">2018</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=1980">1980</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=1990">1990</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2000">2000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2010">2010</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2020">2020</a></li>
         </ul>
       </div>
@@ -45,9 +47,11 @@
           Año máximo
         </button>
         <ul class="dropdown-menu" aria-labelledby="añoMaxDropdown">
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=1980">1980</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=1990">1990</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2000">2000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2010">2010</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2020">2020</a></li>
-          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2022">2022</a></li>
-          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2023">2023</a></li>
         </ul>
       </div>
     </div>
@@ -59,9 +63,12 @@
           Precio mínimo
         </button>
         <ul class="dropdown-menu" aria-labelledby="precioMinDropdown">
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=50000">50,000</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=100000">100,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=150000">150,000</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=200000">200,000</a></li>
-          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=300000">300,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=250000">250,000</a></li>
+
         </ul>
       </div>
     </div>
@@ -73,9 +80,11 @@
           Precio máximo
         </button>
         <ul class="dropdown-menu" aria-labelledby="precioMaxDropdown">
-          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=300000">300,000</a></li>
-          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=500000">500,000</a></li>
-          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=1000000">1,000,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=50000">50,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=100000">100,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=150000">150,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=200000">200,000</a></li>
+          <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=250000">250,000</a></li>
         </ul>
       </div>
     </div>

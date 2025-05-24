@@ -15,6 +15,7 @@ urlpatterns = [
     path('error/', views.error_view, name='error'),
 
     # la pongo al final para q por ejemplo si accedo a /login no piense que login es una marca de coche
+    path('deletecomment/<int:comentario_id>/', views.eliminar_comentario, name='eliminar_comentario'),
     path('add_to_cart/<int:coche_id>/', views.add_to_cart, name='add_to_cart'),
     path('remove_from_cart/<int:coche_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('<str:marca>/', views.coches_por_marca, name='coches_por_marca'),
