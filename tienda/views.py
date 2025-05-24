@@ -1,12 +1,16 @@
 from django.shortcuts import render , redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
-from .models import Coche, Carrito, Comentario
-import stripe
+from .models import Coche, Carrito, Comentario, Venta
+import stripe, random, csv
 from django.conf import settings
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponse
+from collections import Counter
+from datetime import datetime, timedelta
+import random
 
 def index(request):
     query = request.GET.get('q', '')
@@ -268,3 +272,193 @@ def eliminar_comentario(request, comentario_id):
         comentario.delete()
         return redirect('detalles_coche', marca=marca, coche_id=coche_id)
     return redirect('index')
+
+# Para simular ventas y llevarlas a la tabla venta de la base de datos:
+
+@staff_member_required
+def simular_ventas(request):
+    usuarios = list(User.objects.all())
+    coches = list(Coche.objects.all())
+    for _ in range(100):
+        user = random.choice(usuarios)
+        coche = random.choice(coches)
+        cantidad = random.randint(1, 3)
+        # Fecha aleatoria entre año de fabricación y 2025
+        start = datetime(coche.año, 1, 1)
+        end = datetime(2025, 12, 31)
+        if start > end:
+            # Si el año de fabricación es después de 2025, pon la fecha en 2025
+            fecha_random = end
+        else:
+            delta = end - start
+            fecha_random = start + timedelta(days=random.randint(0, delta.days))
+        Venta.objects.create(usuario=user, coche=coche, cantidad=cantidad, fecha=fecha_random)
+    return redirect('estadisticas')  # Redirige a la página de estadísticas
+
+# Para coger los datos de las ventas y mostrarlos en una página de estadísticas:
+
+@staff_member_required
+def estadisticas_ventas(request):
+    ventas = Venta.objects.all()
+    total_ventas = ventas.count()
+
+    # Porcentaje de ventas por marca
+    marcas = Coche.OPCIONES_MARCA
+    ventas_por_marca = {marca[0]: 0 for marca in marcas}
+    for venta in ventas:
+        ventas_por_marca[venta.coche.marca] += venta.cantidad
+    total_coches_vendidos = sum(ventas_por_marca.values())
+    porcentaje_por_marca = {marca: (cantidad / total_coches_vendidos * 100) if total_coches_vendidos else 0 for marca, cantidad in ventas_por_marca.items()}
+
+    # Porcentaje de coches vendidos de año > 2010
+    ventas_modernos = ventas.filter(coche__año__gt=2010).count()
+    porcentaje_modernos = (ventas_modernos / total_ventas * 100) if total_ventas else 0
+
+    # Ventas por país de origen
+    ventas_por_pais = {}
+    for venta in ventas:
+        pais = venta.coche.pais
+        ventas_por_pais[pais] = ventas_por_pais.get(pais, 0) + venta.cantidad
+
+    # Ventas por año de fabricación
+    ventas_por_año = {}
+    for venta in ventas:
+        año = venta.coche.año
+        ventas_por_año[año] = ventas_por_año.get(año, 0) + venta.cantidad
+
+    # Mes/año con más ventas (top 3)
+    ventas_por_mes = {}
+    for venta in ventas:
+        mes = venta.fecha.month  # 1=enero, 12=diciembre
+        ventas_por_mes[mes] = ventas_por_mes.get(mes, 0) + venta.cantidad
+
+    # Top 3 meses con más ventas
+    top_3_meses = sorted(ventas_por_mes.items(), key=lambda x: x[1], reverse=True)[:3]
+
+    # Mes/año con más ventas (top 3)
+    ventas_por_mes_simple = {}
+    for venta in ventas:
+        mes = venta.fecha.month
+        ventas_por_mes_simple[mes] = ventas_por_mes_simple.get(mes, 0) + venta.cantidad
+    top_3_meses_simple = sorted(ventas_por_mes_simple.items(), key=lambda x: x[1], reverse=True)[:3]
+    meses_es = [
+        "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ]
+    top_3_meses_nombre = [(meses_es[mes], cantidad) for mes, cantidad in top_3_meses_simple]
+
+    # Top 5 modelos más vendidos
+    contador_modelos = Counter()
+    for venta in ventas:
+        modelo = f"{venta.coche.marca} {venta.coche.modelo}"
+        contador_modelos[modelo] += venta.cantidad
+    top_5_modelos = contador_modelos.most_common(5)
+
+    return render(request, 'estadisticas.html', {
+        'porcentaje_por_marca': porcentaje_por_marca,
+        'porcentaje_modernos': porcentaje_modernos,
+        'total_ventas': total_ventas,
+        'ventas_por_pais': ventas_por_pais,
+        'ventas_por_año': ventas_por_año,
+        'top_5_modelos': top_5_modelos,
+        'top_3_meses_nombre': top_3_meses_nombre,
+    })
+
+# Para descargar las ventas en un archivo CSV:
+
+@staff_member_required
+def descargar_ventas(request):
+    ventas = Venta.objects.all()
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="ventas.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Usuario', 'Marca', 'Modelo', 'Cantidad', 'Año', 'Precio', 'Fecha'])
+    for venta in ventas:
+        writer.writerow([
+            venta.usuario.username,
+            venta.coche.marca,
+            venta.coche.modelo,
+            venta.cantidad,
+            venta.coche.año,
+            venta.coche.precio,
+            venta.fecha.strftime('%Y-%m-%d %H:%M')
+        ])
+    return response
+
+# Para descargar las estadisticas en un archivo CSV:
+
+@staff_member_required
+def descargar_estadisticas(request):
+    ventas = Venta.objects.all()
+    total_ventas = ventas.count()
+    marcas = Coche.OPCIONES_MARCA
+    ventas_por_marca = {marca[0]: 0 for marca in marcas}
+    for venta in ventas:
+        ventas_por_marca[venta.coche.marca] += venta.cantidad
+    total_coches_vendidos = sum(ventas_por_marca.values())
+    porcentaje_por_marca = {marca: (cantidad / total_coches_vendidos * 100) if total_coches_vendidos else 0 for marca, cantidad in ventas_por_marca.items()}
+    ventas_modernos = ventas.filter(coche__año__gt=2010).count()
+    porcentaje_modernos = (ventas_modernos / total_ventas * 100) if total_ventas else 0
+
+    # Ventas por país de origen
+    ventas_por_pais = {}
+    for venta in ventas:
+        pais = venta.coche.pais
+        ventas_por_pais[pais] = ventas_por_pais.get(pais, 0) + venta.cantidad
+
+    # Ventas por año de fabricación
+    ventas_por_año = {}
+    for venta in ventas:
+        año = venta.coche.año
+        ventas_por_año[año] = ventas_por_año.get(año, 0) + venta.cantidad
+
+    # Top 5 modelos más vendidos
+    from collections import Counter
+    contador_modelos = Counter()
+    for venta in ventas:
+        modelo = f"{venta.coche.marca} {venta.coche.modelo}"
+        contador_modelos[modelo] += venta.cantidad
+    top_5_modelos = contador_modelos.most_common(5)
+
+    # Top 3 meses con más ventas
+    ventas_por_mes_simple = {}
+    for venta in ventas:
+        mes = venta.fecha.month
+        ventas_por_mes_simple[mes] = ventas_por_mes_simple.get(mes, 0) + venta.cantidad
+    top_3_meses_simple = sorted(ventas_por_mes_simple.items(), key=lambda x: x[1], reverse=True)[:3]
+    meses_es = [
+        "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ]
+    top_3_meses_nombre = [(meses_es[mes], cantidad) for mes, cantidad in top_3_meses_simple]
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="estadisticas_ventas.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Estadística', 'Valor'])
+    writer.writerow(['Total ventas', total_ventas])
+    for marca, porcentaje in porcentaje_por_marca.items():
+        writer.writerow([f'Porcentaje ventas {marca}', f'{porcentaje:.2f}%'])
+    writer.writerow(['Porcentaje coches vendidos año > 2010', f'{porcentaje_modernos:.2f}%'])
+
+    writer.writerow([])
+    writer.writerow(['Ventas por país de origen'])
+    for pais, cantidad in ventas_por_pais.items():
+        writer.writerow([pais, cantidad])
+
+    writer.writerow([])
+    writer.writerow(['Ventas por año de fabricación'])
+    for año, cantidad in ventas_por_año.items():
+        writer.writerow([año, cantidad])
+
+    writer.writerow([])
+    writer.writerow(['Top 5 modelos más vendidos'])
+    for modelo, cantidad in top_5_modelos:
+        writer.writerow([modelo, cantidad])
+
+    writer.writerow([])
+    writer.writerow(['Top 3 meses con más ventas (todos los años)'])
+    for mes, cantidad in top_3_meses_nombre:
+        writer.writerow([mes, cantidad])
+
+    return response

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Estadísticas de Ventas</h2>
+<p>Total de ventas: {{ total_ventas }}</p>
+
+<h4>Porcentaje de ventas por marca:</h4>
+<ul>
+  {% for marca, porcentaje in porcentaje_por_marca.items %}
+    <li>{{ marca }}: {{ porcentaje|floatformat:2 }}%</li>
+  {% endfor %}
+</ul>
+
+<h4>Porcentaje de coches vendidos (año > 2010):</h4>
+<p>{{ porcentaje_modernos|floatformat:2 }}%</p>
+
+<h4>Ventas por país de origen:</h4>
+<ul>
+  {% for pais, cantidad in ventas_por_pais.items %}
+    <li>{{ pais }}: {{ cantidad }}</li>
+  {% endfor %}
+</ul>
+
+<h4>Ventas por año de fabricación:</h4>
+<ul>
+  {% for año, cantidad in ventas_por_año.items %}
+    <li>{{ año }}: {{ cantidad }}</li>
+  {% endfor %}
+</ul>
+
+<h4>Top 5 modelos más vendidos:</h4>
+<ol>
+  {% for modelo, cantidad in top_5_modelos %}
+    <li>{{ modelo }}: {{ cantidad }}</li>
+  {% endfor %}
+</ol>
+
+<h4>Top 3 meses con más ventas (2000-2025):</h4>
+<ul>
+  {% for mes, cantidad in top_3_meses_nombre %}
+    <li>{{ mes }}: {{ cantidad }} ventas</li>
+  {% empty %}
+    <li>No hay ventas registradas.</li>
+  {% endfor %}
+</ul>
+
+<form method="post" action="{% url 'simular_ventas' %}">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-warning">Simular 100 ventas</button>
+</form>
+
+<a href="{% url 'descargar_ventas' %}" class="btn btn-success mt-3">Descargar ventas en CSV</a>
+<a href="{% url 'descargar_estadisticas' %}" class="btn btn-info mt-3">Descargar estadísticas en CSV</a>
+{% endblock %}

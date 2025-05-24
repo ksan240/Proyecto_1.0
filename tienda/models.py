@@ -44,3 +44,14 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f"{self.usuario} - {self.valoracion}⭐"
+    
+# modelo para la simulacion de ventas
+
+class Venta(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    coche = models.ForeignKey(Coche, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+    fecha = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.usuario} compró {self.cantidad} {self.coche.modelo} el {self.fecha.date()}"

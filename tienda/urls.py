@@ -14,6 +14,11 @@ urlpatterns = [
     path('cancel/', views.cancel, name='cancel'),
     path('error/', views.error_view, name='error'),
 
+    path('simular-ventas/', views.simular_ventas, name='simular_ventas'),
+    path('estadisticas/', views.estadisticas_ventas, name='estadisticas'),
+    path('descargar-ventas/', views.descargar_ventas, name='descargar_ventas'),
+    path('descargar-estadisticas/', views.descargar_estadisticas, name='descargar_estadisticas'),
+
     # la pongo al final para q por ejemplo si accedo a /login no piense que login es una marca de coche
     path('deletecomment/<int:comentario_id>/', views.eliminar_comentario, name='eliminar_comentario'),
     path('add_to_cart/<int:coche_id>/', views.add_to_cart, name='add_to_cart'),

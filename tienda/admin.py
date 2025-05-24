@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 # Para ver los coches desde el panel admin
 
-from .models import Coche, Carrito, Comentario
+from .models import Coche, Carrito, Comentario, Venta
 
 @admin.register(Coche)
 class CocheAdmin(admin.ModelAdmin):
@@ -16,6 +16,10 @@ class CarritoAdmin(admin.ModelAdmin):
 @admin.register(Comentario)
 class ComentarioAdmin(admin.ModelAdmin):
     list_display = ('coche', 'usuario', 'valoracion', 'fecha')
+
+@admin.register(Venta)
+class VentaAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'coche', 'cantidad', 'fecha')
 
 # Para añadir el correo a users
 
