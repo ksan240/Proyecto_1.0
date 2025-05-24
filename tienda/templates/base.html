@@ -22,16 +22,17 @@
       </a>
 
       <!-- Buscador -->
-      <form class="d-flex flex-grow-1 mx-4" method="GET" action="">
-        <input
-          class="form-control me-2"
-          type="search"
-          name="q"
-          placeholder="Buscar coches..."
-          aria-label="Buscar"
-        >
-        <button class="btn btn-outline-primary" type="submit">Buscar</button>
-      </form>
+<form class="d-flex flex-grow-1 mx-4" method="GET" action="{% url 'index' %}">
+  <input
+    class="form-control me-2"
+    type="search"
+    name="q"
+    placeholder="Buscar coches..."
+    aria-label="Buscar"
+    value="{{ query|default:'' }}"
+  >
+  <button class="btn btn-outline-primary" type="submit">Buscar</button>
+</form>
 
       <!-- Admin / Login / Carrito -->
       <div class="d-flex gap-2">

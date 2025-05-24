@@ -20,5 +20,4 @@ urlpatterns = [
     path('<str:marca>/', views.coches_por_marca, name='coches_por_marca'),
     path('<str:marca>/<int:coche_id>/', views.detalles_coche, name='detalles_coche'),
 
-
 ]

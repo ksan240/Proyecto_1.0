@@ -1,13 +1,22 @@
 from django.shortcuts import render , redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .models import Coche, Carrito
 import stripe
 from django.conf import settings
+from django.db.models import Q
 
 def index(request):
-    return render(request, 'index.html')
+    query = request.GET.get('q', '')
+    coches = []
+    if query:
+        coches = Coche.objects.filter(
+            Q(marca__icontains=query) |
+            Q(modelo__icontains=query) |
+            Q(pais__icontains=query) |
+            Q(descripcion__icontains=query)
+        )
+    return render(request, 'index.html', {'coches': coches, 'query': query})
 
 def ferrari(request):
     return render(request, 'ferrari.html')
