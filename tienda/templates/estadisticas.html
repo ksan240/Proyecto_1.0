@@ -1,53 +1,149 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Estadísticas de Ventas</h2>
-<p>Total de ventas: {{ total_ventas }}</p>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<h4>Porcentaje de ventas por marca:</h4>
-<ul>
-  {% for marca, porcentaje in porcentaje_por_marca.items %}
-    <li>{{ marca }}: {{ porcentaje|floatformat:2 }}%</li>
-  {% endfor %}
-</ul>
+    {{ marcas_labels|json_script:"marcas-labels" }}
+    {{ marcas_data|json_script:"marcas-data" }}
+    {{ rangos_labels|json_script:"rangos-labels" }}
+    {{ rangos_data|json_script:"rangos-data" }}
+    {{ pais_labels|json_script:"pais-labels" }}
+    {{ pais_data|json_script:"pais-data" }}
+    {{ año_labels|json_script:"año-labels" }}
+    {{ año_data|json_script:"año-data" }}
+    {{ modelos_labels|json_script:"modelos-labels" }}
+    {{ modelos_data|json_script:"modelos-data" }}
+    {{ meses_labels|json_script:"meses-labels" }}
+    {{ meses_data|json_script:"meses-data" }}
 
-<h4>Porcentaje de coches vendidos (año > 2010):</h4>
-<p>{{ porcentaje_modernos|floatformat:2 }}%</p>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card h-100 p-3">
+                <h5 class="card-title">Porcentaje de ventas por marca</h5>
+                <canvas id="marcasChart" width="350" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 p-3">
+                <h5 class="card-title">Porcentaje de ventas por rango de año de compra</h5>
+                <canvas id="rangosChart" width="350" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 p-3">
+                <h5 class="card-title">Ventas por país de origen</h5>
+                <canvas id="paisChart" width="350" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 p-3">
+                <h5 class="card-title">Ventas por año de fabricación</h5>
+                <canvas id="añoChart" width="350" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 p-3">
+                <h5 class="card-title">Top 5 modelos más vendidos</h5>
+                <canvas id="modelosChart" width="350" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 p-3">
+                <h5 class="card-title">Top 3 meses con más ventas</h5>
+                <canvas id="mesesChart" width="350" height="200"></canvas>
+            </div>
+        </div>
+    </div>
 
-<h4>Ventas por país de origen:</h4>
-<ul>
-  {% for pais, cantidad in ventas_por_pais.items %}
-    <li>{{ pais }}: {{ cantidad }}</li>
-  {% endfor %}
-</ul>
+    <div class="mt-4">
+        <form method="post" action="{% url 'simular_ventas' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-warning">Simular 100 ventas</button>
+        </form>
+        <a href="{% url 'descargar_ventas' %}" class="btn btn-success mt-3">Descargar ventas en CSV</a>
+        <a href="{% url 'descargar_estadisticas' %}" class="btn btn-info mt-3">Descargar estadísticas en CSV</a>
+    </div>
 
-<h4>Ventas por año de fabricación:</h4>
-<ul>
-  {% for año, cantidad in ventas_por_año.items %}
-    <li>{{ año }}: {{ cantidad }}</li>
-  {% endfor %}
-</ul>
+    <script>
+        const marcasLabels = JSON.parse(document.getElementById('marcas-labels').textContent);
+        const marcasData = JSON.parse(document.getElementById('marcas-data').textContent);
+        new Chart(document.getElementById('marcasChart'), {
+            type: 'pie',
+            data: {
+                labels: marcasLabels,
+                datasets: [{
+                    data: marcasData,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#8BC34A', '#FF9800', '#AB47BC'],
+                }]
+            }
+        });
 
-<h4>Top 5 modelos más vendidos:</h4>
-<ol>
-  {% for modelo, cantidad in top_5_modelos %}
-    <li>{{ modelo }}: {{ cantidad }}</li>
-  {% endfor %}
-</ol>
+        const rangosLabels = JSON.parse(document.getElementById('rangos-labels').textContent);
+        const rangosData = JSON.parse(document.getElementById('rangos-data').textContent);
+        new Chart(document.getElementById('rangosChart'), {
+            type: 'bar',
+            data: {
+                labels: rangosLabels,
+                datasets: [{
+                    label: 'Porcentaje',
+                    data: rangosData,
+                    backgroundColor: '#42A5F5'
+                }]
+            }
+        });
 
-<h4>Top 3 meses con más ventas (2000-2025):</h4>
-<ul>
-  {% for mes, cantidad in top_3_meses_nombre %}
-    <li>{{ mes }}: {{ cantidad }} ventas</li>
-  {% empty %}
-    <li>No hay ventas registradas.</li>
-  {% endfor %}
-</ul>
+        const paisLabels = JSON.parse(document.getElementById('pais-labels').textContent);
+        const paisData = JSON.parse(document.getElementById('pais-data').textContent);
+        new Chart(document.getElementById('paisChart'), {
+            type: 'doughnut',
+            data: {
+                labels: paisLabels,
+                datasets: [{
+                    data: paisData,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#8BC34A', '#FF9800', '#AB47BC'],
+                }]
+            }
+        });
 
-<form method="post" action="{% url 'simular_ventas' %}">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-warning">Simular 100 ventas</button>
-</form>
+        const añoLabels = JSON.parse(document.getElementById('año-labels').textContent);
+        const añoData = JSON.parse(document.getElementById('año-data').textContent);
+        new Chart(document.getElementById('añoChart'), {
+            type: 'bar',
+            data: {
+                labels: añoLabels,
+                datasets: [{
+                    label: 'Ventas',
+                    data: añoData,
+                    backgroundColor: '#FFA726'
+                }]
+            }
+        });
 
-<a href="{% url 'descargar_ventas' %}" class="btn btn-success mt-3">Descargar ventas en CSV</a>
-<a href="{% url 'descargar_estadisticas' %}" class="btn btn-info mt-3">Descargar estadísticas en CSV</a>
+        const modelosLabels = JSON.parse(document.getElementById('modelos-labels').textContent);
+        const modelosData = JSON.parse(document.getElementById('modelos-data').textContent);
+        new Chart(document.getElementById('modelosChart'), {
+            type: 'bar',
+            data: {
+                labels: modelosLabels,
+                datasets: [{
+                    label: 'Ventas',
+                    data: modelosData,
+                    backgroundColor: '#8BC34A'
+                }]
+            }
+        });
+
+        const mesesLabels = JSON.parse(document.getElementById('meses-labels').textContent);
+        const mesesData = JSON.parse(document.getElementById('meses-data').textContent);
+        new Chart(document.getElementById('mesesChart'), {
+            type: 'bar',
+            data: {
+                labels: mesesLabels,
+                datasets: [{
+                    label: 'Ventas',
+                    data: mesesData,
+                    backgroundColor: '#AB47BC'
+                }]
+            }
+        });
+    </script>
 {% endblock %}

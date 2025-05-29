@@ -310,9 +310,18 @@ def estadisticas_ventas(request):
     total_coches_vendidos = sum(ventas_por_marca.values())
     porcentaje_por_marca = {marca: (cantidad / total_coches_vendidos * 100) if total_coches_vendidos else 0 for marca, cantidad in ventas_por_marca.items()}
 
-    # Porcentaje de coches vendidos de año > 2010
-    ventas_modernos = ventas.filter(coche__año__gt=2010).count()
-    porcentaje_modernos = (ventas_modernos / total_ventas * 100) if total_ventas else 0
+    # Porcentaje de ventas por rango de año de compra (fecha de la venta)
+    rangos = [
+        (1990, 2000),
+        (2000, 2010),
+        (2010, 2020),
+        (2020, 2026),
+    ]
+    ventas_por_rango = {}
+    for inicio, fin in rangos:
+        ventas_en_rango = ventas.filter(fecha__year__gte=inicio, fecha__year__lt=fin).count()
+        porcentaje = (ventas_en_rango / total_ventas * 100) if total_ventas else 0
+        ventas_por_rango[f"{inicio}-{fin-1}"] = porcentaje
 
     # Ventas por país de origen
     ventas_por_pais = {}
@@ -326,26 +335,17 @@ def estadisticas_ventas(request):
         año = venta.coche.año
         ventas_por_año[año] = ventas_por_año.get(año, 0) + venta.cantidad
 
-    # Mes/año con más ventas (top 3)
+    # Top 3 meses con más ventas (solo mes, todos los años)
     ventas_por_mes = {}
     for venta in ventas:
-        mes = venta.fecha.month  # 1=enero, 12=diciembre
-        ventas_por_mes[mes] = ventas_por_mes.get(mes, 0) + venta.cantidad
-
-    # Top 3 meses con más ventas
-    top_3_meses = sorted(ventas_por_mes.items(), key=lambda x: x[1], reverse=True)[:3]
-
-    # Mes/año con más ventas (top 3)
-    ventas_por_mes_simple = {}
-    for venta in ventas:
         mes = venta.fecha.month
-        ventas_por_mes_simple[mes] = ventas_por_mes_simple.get(mes, 0) + venta.cantidad
-    top_3_meses_simple = sorted(ventas_por_mes_simple.items(), key=lambda x: x[1], reverse=True)[:3]
+        ventas_por_mes[mes] = ventas_por_mes.get(mes, 0) + venta.cantidad
+    top_3_meses = sorted(ventas_por_mes.items(), key=lambda x: x[1], reverse=True)[:3]
     meses_es = [
         "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
     ]
-    top_3_meses_nombre = [(meses_es[mes], cantidad) for mes, cantidad in top_3_meses_simple]
+    top_3_meses_nombre = [(meses_es[mes], cantidad) for mes, cantidad in top_3_meses]
 
     # Top 5 modelos más vendidos
     contador_modelos = Counter()
@@ -355,13 +355,18 @@ def estadisticas_ventas(request):
     top_5_modelos = contador_modelos.most_common(5)
 
     return render(request, 'estadisticas.html', {
-        'porcentaje_por_marca': porcentaje_por_marca,
-        'porcentaje_modernos': porcentaje_modernos,
-        'total_ventas': total_ventas,
-        'ventas_por_pais': ventas_por_pais,
-        'ventas_por_año': ventas_por_año,
-        'top_5_modelos': top_5_modelos,
-        'top_3_meses_nombre': top_3_meses_nombre,
+        'marcas_labels': list(porcentaje_por_marca.keys()),
+        'marcas_data': list(porcentaje_por_marca.values()),
+        'rangos_labels': list(ventas_por_rango.keys()),
+        'rangos_data': list(ventas_por_rango.values()),
+        'pais_labels': list(ventas_por_pais.keys()),
+        'pais_data': list(ventas_por_pais.values()),
+        'año_labels': list(ventas_por_año.keys()),
+        'año_data': list(ventas_por_año.values()),
+        'modelos_labels': [m[0] for m in top_5_modelos],
+        'modelos_data': [m[1] for m in top_5_modelos],
+        'meses_labels': [m[0] for m in top_3_meses_nombre],
+        'meses_data': [m[1] for m in top_3_meses_nombre],
     })
 
 # Para descargar las ventas en un archivo CSV:
@@ -397,8 +402,19 @@ def descargar_estadisticas(request):
         ventas_por_marca[venta.coche.marca] += venta.cantidad
     total_coches_vendidos = sum(ventas_por_marca.values())
     porcentaje_por_marca = {marca: (cantidad / total_coches_vendidos * 100) if total_coches_vendidos else 0 for marca, cantidad in ventas_por_marca.items()}
-    ventas_modernos = ventas.filter(coche__año__gt=2010).count()
-    porcentaje_modernos = (ventas_modernos / total_ventas * 100) if total_ventas else 0
+
+    # Porcentaje de ventas por rango de año de compra (fecha de la venta)
+    rangos = [
+        (1990, 2000),
+        (2000, 2010),
+        (2010, 2020),
+        (2020, 2030),
+    ]
+    ventas_por_rango = {}
+    for inicio, fin in rangos:
+        ventas_en_rango = ventas.filter(fecha__year__gte=inicio, fecha__year__lt=fin).count()
+        porcentaje = (ventas_en_rango / total_ventas * 100) if total_ventas else 0
+        ventas_por_rango[f"{inicio}-{fin-1}"] = porcentaje
 
     # Ventas por país de origen
     ventas_por_pais = {}
@@ -413,24 +429,23 @@ def descargar_estadisticas(request):
         ventas_por_año[año] = ventas_por_año.get(año, 0) + venta.cantidad
 
     # Top 5 modelos más vendidos
-    from collections import Counter
     contador_modelos = Counter()
     for venta in ventas:
         modelo = f"{venta.coche.marca} {venta.coche.modelo}"
         contador_modelos[modelo] += venta.cantidad
     top_5_modelos = contador_modelos.most_common(5)
 
-    # Top 3 meses con más ventas
-    ventas_por_mes_simple = {}
+    # Top 3 meses con más ventas (solo mes, todos los años)
+    ventas_por_mes = {}
     for venta in ventas:
         mes = venta.fecha.month
-        ventas_por_mes_simple[mes] = ventas_por_mes_simple.get(mes, 0) + venta.cantidad
-    top_3_meses_simple = sorted(ventas_por_mes_simple.items(), key=lambda x: x[1], reverse=True)[:3]
+        ventas_por_mes[mes] = ventas_por_mes.get(mes, 0) + venta.cantidad
+    top_3_meses = sorted(ventas_por_mes.items(), key=lambda x: x[1], reverse=True)[:3]
     meses_es = [
         "", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
     ]
-    top_3_meses_nombre = [(meses_es[mes], cantidad) for mes, cantidad in top_3_meses_simple]
+    top_3_meses_nombre = [(meses_es[mes], cantidad) for mes, cantidad in top_3_meses]
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="estadisticas_ventas.csv"'
@@ -439,7 +454,11 @@ def descargar_estadisticas(request):
     writer.writerow(['Total ventas', total_ventas])
     for marca, porcentaje in porcentaje_por_marca.items():
         writer.writerow([f'Porcentaje ventas {marca}', f'{porcentaje:.2f}%'])
-    writer.writerow(['Porcentaje coches vendidos año > 2010', f'{porcentaje_modernos:.2f}%'])
+
+    writer.writerow([])
+    writer.writerow(['Porcentaje de ventas por rango de año de compra'])
+    for rango, porcentaje in ventas_por_rango.items():
+        writer.writerow([f'Ventas {rango}', f'{porcentaje:.2f}%'])
 
     writer.writerow([])
     writer.writerow(['Ventas por país de origen'])
