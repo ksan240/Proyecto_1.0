@@ -7,51 +7,72 @@
   <title>{% block title %}CarSan Luxury{% endblock %}</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
   {% block extra_head %}{% endblock %}
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
   <!-- ====== HEADER ====== -->
-  <header class="bg-light border-bottom">
-    <div class="container d-flex align-items-center py-3">
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 shadow-sm border-bottom border-secondary" style="backdrop-filter: blur(8px);">
+    <div class="container-fluid px-4">
       <!-- Logo -->
-      <a href="{% url 'index' %}" class="fs-3 fw-bold text-decoration-none text-dark">
-        🚗 CarSan
+      <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center gap-3 fs-2 fw-bold letter-spacing-2">
+        <img src="{% static 'logo.PNG' %}" alt="Logo CarSan" class="rounded-circle bg-white p-1" style="width: 44px; height: 44px; object-fit: cover;">
+        <span class="text-white" style="font-family: Georgia ; font-size: 2 rem; letter-spacing: 1px;">
+          CarSan
+        </span>
       </a>
-
-      <!-- Buscador -->
-<form class="d-flex flex-grow-1 mx-4" method="GET" action="{% url 'index' %}">
-  <input
-    class="form-control me-2"
-    type="search"
-    name="q"
-    placeholder="Buscar coches..."
-    aria-label="Buscar"
-    value="{{ query|default:'' }}"
-  >
-  <button class="btn btn-outline-primary" type="submit">Buscar</button>
-</form>
-
-      <!-- Admin / Login / Carrito -->
-      <div class="d-flex gap-2">
-        <a href="{% url 'view_cart' %}" class="btn btn-outline-secondary">
-          🛒 Carrito
-        </a>
-        {% if user.is_authenticated %}
-          <span class="navbar-text">Hola, {{ user.username }}</span>
-          <a href="{% url 'logout' %}" class="btn btn-outline-secondary">Cerrar Sesión</a>
-        {% else %}
-          <button
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#loginModal">
-            Login
+      <!-- Responsive toggler -->
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Navbar content -->
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <!-- Buscador -->
+        <form class="d-flex mx-lg-4 my-3 my-lg-0 flex-grow-1" method="GET" action="{% url 'index' %}">
+          <input
+            class="form-control me-2 bg-dark text-white border-0 rounded-pill px-4"
+            type="search"
+            name="q"
+            placeholder="Buscar coches de lujo..."
+            aria-label="Buscar"
+            value="{{ query|default:'' }}"
+            style="min-width: 220px;"
+          >
+          <button class="btn btn-outline-light rounded-pill px-4" type="submit">
+            <i class="bi bi-search"></i>
           </button>
-        {% endif %}
+        </form>
+        <!-- Botones usuario -->
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
+          <li class="nav-item">
+            <a href="{% url 'view_cart' %}" class="btn btn-outline-light rounded-pill px-3 d-flex align-items-center gap-1">
+              <i class="bi bi-cart3"></i>
+              <span class="d-none d-md-inline">Carrito</span>
+            </a>
+          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <span class="text-white-50 small px-2">Hola, <b>{{ user.username }}</b></span>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'logout' %}" class="btn btn-outline-light rounded-pill px-3">Cerrar Sesión</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <button class="btn btn-light text-dark fw-bold rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="bi bi-person-circle me-1"></i> Login
+              </button>
+            </li>
+          {% endif %}
+        </ul>
       </div>
     </div>
-  </header>
+  </nav>
+</header>
 
   <!-- Modal de Login y Registro -->
   <div
@@ -62,12 +83,14 @@
     aria-hidden="{% if not login_error %}true{% else %}false{% endif %}"
   >
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
+      <div class="modal-content bg-dark text-white border-secondary shadow-lg">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="loginModalLabel">
+            <i class="bi bi-person-circle me-2"></i>Iniciar Sesión
+          </h5>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
             aria-label="Cerrar"
           ></button>
@@ -80,7 +103,7 @@
               <label for="id_username" class="form-label">Usuario</label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control bg-secondary text-white border-0"
                 id="id_username"
                 name="username"
                 value="{{ request.POST.username|default:'' }}"
@@ -91,7 +114,7 @@
               <label for="id_password" class="form-label">Contraseña</label>
               <input
                 type="password"
-                class="form-control"
+                class="form-control bg-secondary text-white border-0"
                 id="id_password"
                 name="password"
                 required
@@ -102,10 +125,12 @@
                 {{ login_error }}
               </div>
             {% endif %}
-            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+            <button type="submit" class="btn btn-light w-100 fw-bold">Entrar</button>
           </form>
-          <p class="mt-3 text-center">
-            ¿No tienes cuenta? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate aquí</a>.
+          <hr class="bg-secondary">
+          <p class="mt-2 text-center small">
+            ¿No tienes cuenta?
+            <a href="#" class="text-info fw-bold" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Regístrate aquí</a>
           </p>
         </div>
       </div>
@@ -121,12 +146,14 @@
     aria-hidden="{% if not register_error %}true{% else %}false{% endif %}"
   >
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="registerModalLabel">Registrarse</h5>
+      <div class="modal-content bg-dark text-white border-secondary shadow-lg">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="registerModalLabel">
+            <i class="bi bi-person-plus-fill me-2"></i>Registrarse
+          </h5>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
             aria-label="Cerrar"
           ></button>
@@ -139,7 +166,7 @@
               <label for="id_new_username" class="form-label">Usuario</label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control bg-secondary text-white border-0"
                 id="id_new_username"
                 name="username"
                 value="{{ register_form.username.value|default:'' }}"
@@ -150,7 +177,7 @@
               <label for="id_new_email" class="form-label">Correo electrónico</label>
               <input
                 type="email"
-                class="form-control"
+                class="form-control bg-secondary text-white border-0"
                 id="id_new_email"
                 name="email"
                 value="{{ register_form.email.value|default:'' }}"
@@ -161,12 +188,12 @@
               <label for="id_new_password1" class="form-label">Contraseña</label>
               <input
                 type="password"
-                class="form-control"
+                class="form-control bg-secondary text-white border-0"
                 id="id_new_password1"
                 name="password1"
                 required
               >
-              <small class="form-text text-muted">
+              <small class="form-text text-light-50">
                 La contraseña debe tener al menos 8 caracteres, incluir letras y números.
               </small>
             </div>
@@ -174,7 +201,7 @@
               <label for="id_new_password2" class="form-label">Confirmar Contraseña</label>
               <input
                 type="password"
-                class="form-control"
+                class="form-control bg-secondary text-white border-0"
                 id="id_new_password2"
                 name="password2"
                 required
@@ -185,7 +212,7 @@
               {{ register_error }}
             </div>
             {% endif %}
-            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+            <button type="submit" class="btn btn-light w-100 fw-bold">Registrarse</button>
           </form>
         </div>
       </div>
@@ -199,17 +226,26 @@
   </main>
   <!-- ====== FIN CONTENIDO ====== -->
 
-  <!-- ====== FOOTER ====== -->
-  <footer class="bg-dark text-white text-center py-4 mt-auto">
-    <div class="container">
-      <p class="mb-2">&copy; 2025 CarSan. Todos los derechos reservados.</p>
-      <div>
-        <a href="https://instagram.com" class="text-white me-3">Instagram</a>
-        <a href="https://x.com" class="text-white me-3">Twitter</a>
-        <a href="https://facebook.com" class="text-white">Facebook</a>
+  <!-- ====== FOOTER PROFESIONAL ====== -->
+<footer class="bg-black border-top border-secondary mt-auto pt-4 pb-2">
+  <div class="container">
+    <hr class="border-secondary mb-3">
+    <div class="row align-items-center">
+      <div class="col-md-6 d-flex align-items-center gap-2">
+        <span class="fw-bold px-2 py-1 bg-secondary text-black rounded-1" style="font-family: Georgia, serif; font-size: 1.1rem;">CS</span>
+        <span class="text-secondary small">Copyright © 2025 CarSan Luxury</span>
+      </div>
+      <div class="col-md-6 text-end">
+        <a href="https://instagram.com" class="text-white-50 fs-5 mx-2" title="Instagram"><i class="bi bi-instagram"></i></a>
+        <a href="https://facebook.com" class="text-white-50 fs-5 mx-2" title="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="https://youtube.com" class="text-white-50 fs-5 mx-2" title="YouTube"><i class="bi bi-youtube"></i></a>
+        <a href="https://x.com" class="text-white-50 fs-5 mx-2" title="Twitter"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://linkedin.com" class="text-white-50 fs-5 mx-2" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        <a href="https://pinterest.com" class="text-white-50 fs-5 mx-2" title="Pinterest"><i class="bi bi-pinterest"></i></a>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
   <!-- ====== FIN FOOTER ====== -->
   {% block extra_js %}{% endblock %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>

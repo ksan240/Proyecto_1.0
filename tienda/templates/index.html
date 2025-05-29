@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<nav class="navbar navbar-expand-lg bg-white border-bottom">
-    <div class="container">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item"><a class="nav-link" href="{% url 'coches_por_marca' 'Ferrari' %}">Ferrari</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'coches_por_marca' 'Pagani' %}">Pagani</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'coches_por_marca' 'Lamborghini' %}">Lamborghini</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'coches_por_marca' 'McLaren' %}">McLaren</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'coches_por_marca' 'BMW' %}">BMW</a></li>
+<nav class="bg-white border-bottom mb-4">
+    <div class="container-fluid px-4">
+      <ul class="nav justify-content-start py-2" style="font-family: 'Montserrat'; font-size: 1.08rem; font-weight: 400;margin-top: -15px">
+        <li class="nav-item"><a class="nav-link text-dark px-3" href="{% url 'coches_por_marca' 'Ferrari' %}">Ferrari</a></li>
+        <li class="nav-item"><a class="nav-link text-dark px-3" href="{% url 'coches_por_marca' 'Pagani' %}">Pagani</a></li>
+        <li class="nav-item"><a class="nav-link text-dark px-3" href="{% url 'coches_por_marca' 'Lamborghini' %}">Lamborghini</a></li>
+        <li class="nav-item"><a class="nav-link text-dark px-3" href="{% url 'coches_por_marca' 'McLaren' %}">McLaren</a></li>
+        <li class="nav-item"><a class="nav-link text-dark px-3" href="{% url 'coches_por_marca' 'BMW' %}">BMW</a></li>
       </ul>
     </div>
 </nav>                
@@ -16,6 +16,75 @@
   <h1 class="mb-4">Bienvenido a la Tienda de Coches de Lujo</h1>
   <p>Descubre marcas como Bugatti, Pagani, Ferrari, Lamborghini, McLaren y BMW.</p>
 {% endif %}
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 style="font-family: Georgia, serif; font-size:2.5rem;">Marcas Populares</h2>
+  </div>
+  <div class="row g-4">
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.bugatti.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'bugatti_logo.png' %}" alt="Bugatti" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.pagani.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'pagani_logo.png' %}" alt="Pagani" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.ferrari.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'ferrari_logo.png' %}" alt="Ferrari" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.koenigsegg.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'koenigsegg_logo.png' %}" alt="Koenigsegg" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.lamborghini.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'Lamborghini_Logo.png' %}" alt="Lamborghini" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.mercedes-benz.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'Mercedes_logo.png' %}" alt="Mercedes" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.mclaren.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'mclaren_logo.png' %}" alt="McLaren" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.rolls-roycemotorcars.com" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'rr_logo.jpg' %}" alt="RR" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.bmw.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'bmw_logo.png' %}" alt="BMW" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.audi.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'audi_logo.png' %}" alt="Audi" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.porsche.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'porsche_logo.png' %}" alt="Porsche" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <a href="https://www.bentley.com/" target="_blank" class="d-block border p-3 text-center cuadrado-marca">
+        <img src="{% static 'bentley_logo.png' %}" alt="Bentley" class="img-fluid" style="max-height:70px;">
+      </a>
+    </div>
+  </div>
+</div>
+
 
 {% if query %}
   <h5>Resultados para "{{ query }}":</h5>

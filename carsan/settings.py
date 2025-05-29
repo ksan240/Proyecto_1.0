@@ -118,6 +118,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+STATICFILES_DIRS = [BASE_DIR / "tienda" / "static"]
 STATIC_URL = 'static/'
 
 # Default primary key field type
@@ -156,3 +157,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'csantoyocm@gmail.com'
 EMAIL_HOST_PASSWORD = 'xnis ugsp oscx peyu'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
