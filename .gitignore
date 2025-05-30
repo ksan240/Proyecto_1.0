@@ -20,7 +20,7 @@ staticfiles/
 # Logs
 *.log
 
-# Node (si usas npm/yarn para frontend)
+
 node_modules/
 
 # Otros
