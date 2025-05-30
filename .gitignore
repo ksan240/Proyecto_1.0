@@ -1,0 +1,28 @@
+# Django
+*.pyc
+__pycache__/
+db.sqlite3
+*.sqlite3
+/media/
+staticfiles/
+.env
+*.env
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# MacOS
+.DS_Store
+
+# Logs
+*.log
+
+# Node (si usas npm/yarn para frontend)
+node_modules/
+
+# Otros
+*.bak
+*.swp
