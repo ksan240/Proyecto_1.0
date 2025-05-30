@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Error</h1>
-<p>{{ error_message }}</p>
-<a href="{% url 'view_cart' %}">Volver al carrito</a>
+<h1 class="text-white">Error</h1>
+<p class="text-white">{{ error_message }}</p>
+<a class="text-white" href="{% url 'view_cart' %}">Volver al carrito</a>
 {% endblock %}

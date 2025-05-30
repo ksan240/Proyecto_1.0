@@ -11,24 +11,24 @@
       {% endif %}
     </div>
     <div class="col-md-6">
-      <h1>{{ coche.marca }} {{ coche.modelo }}</h1>
-      <p><strong>Año:</strong> {{ coche.año }}</p>
-      <p><strong>Precio:</strong> ${{ coche.precio }}</p>
-      <p><strong>País:</strong> {{ coche.pais }}</p>
-      <p><strong>Descripción:</strong> {{ coche.descripcion }}</p>
-      <p><strong>Stock disponible:</strong> {{ coche.cantidad_disponible }}</p>
+      <h1 class="text-white">{{ coche.marca }} {{ coche.modelo }}</h1>
+      <p class="text-white"><strong>Año:</strong> {{ coche.año }}</p>
+      <p class="text-white"><strong>Precio:</strong> ${{ coche.precio }}</p>
+      <p class="text-white"><strong>País:</strong> {{ coche.pais }}</p>
+      <p class="text-white"><strong>Descripción:</strong> {{ coche.descripcion }}</p>
+      <p class="text-white"><strong>Stock disponible:</strong> {{ coche.cantidad_disponible }}</p>
       <a href="{% url 'add_to_cart' coche.id %}" class="btn btn-primary">Añadir al carrito</a>
     </div>
   </div>
 </div>
 <!-- Mostrar comentarios -->
-<h4>Valoraciones y comentarios</h4>
+<h4 class="text-white">Valoraciones y comentarios</h4>
 {% for comentario in comentarios %}
   <div class="mb-2 border rounded p-2">
-    <strong>{{ comentario.usuario.username }}</strong>
-    <span>({{ comentario.valoracion }}⭐)</span>
-    <p>{{ comentario.texto }}</p>
-    <small class="text-muted">{{ comentario.fecha|date:"d/m/Y H:i" }}</small>
+    <strong class="text-white">{{ comentario.usuario.username }}</strong>
+    <span class="text-white">({{ comentario.valoracion }}⭐)</span>
+    <p class="text-white">{{ comentario.texto }}</p>
+    <small class="text-white-50">{{ comentario.fecha|date:"d/m/Y H:i" }}</small>
     {% if user.is_authenticated and comentario.usuario == user %}
       <form method="post" action="{% url 'eliminar_comentario' comentario.id %}" style="display:inline;">
         {% csrf_token %}
@@ -37,7 +37,7 @@
     {% endif %}
   </div>
 {% empty %}
-  <p>No hay comentarios aún.</p>
+  <p class="text-white">No hay comentarios aún.</p>
 {% endfor %}
 
 <!-- Formulario para añadir comentario -->
@@ -46,8 +46,8 @@
     <form method="post" class="mt-3">
       {% csrf_token %}
       <div class="mb-2">
-        <label for="valoracion">Valoración:</label>
-        <select name="valoracion" id="valoracion" class="form-select w-auto d-inline">
+        <label class="text-white" for="valoracion">Valoración:</label>
+        <select name="valoracion" id="valoracion" class="form-select w-auto d-inline ">
           {% for i in "12345" %}
             <option value="{{ i }}">{{ i }}⭐</option>
           {% endfor %}
@@ -64,7 +64,7 @@
     </div>
   {% endif %}
 {% else %}
-  <p>Inicia sesión para comentar.</p>
+  <p class="text-white">Inicia sesión para comentar.</p>
 {% endif %}
 
 {% endblock %}

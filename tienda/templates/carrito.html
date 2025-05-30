@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-4">
-  <h1>Carrito</h1>
+  <h1 class="text-white">Carrito</h1>
   <table class="table">
     <thead>
       <tr>
@@ -29,7 +29,7 @@
   </table>
 
   <div class="mt-4">
-    <h3>Total: ${{ total }}</h3>
+    <h3 class="text-white">Total: ${{ total }}</h3>
     <!-- boton cancelar todo el carrito -->
     <a href="{% url 'cancel' %}" class="btn btn-warning">Cancelar</a>
     <!-- boton finalizar compra -->

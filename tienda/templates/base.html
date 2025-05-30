@@ -12,7 +12,7 @@
   {% block extra_head %}{% endblock %}
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100" style="background-color: #00050c;">
 
   <!-- ====== HEADER ====== -->
 <header>
@@ -34,7 +34,7 @@
         <!-- Buscador -->
         <form class="d-flex mx-lg-4 my-3 my-lg-0 flex-grow-1" method="GET" action="{% url 'index' %}">
           <input
-            class="form-control me-2 bg-dark text-white border-0 rounded-pill px-4"
+            class="form-control me-2 text-white border-0 rounded-pill px-4"
             type="search"
             name="q"
             placeholder="Buscar coches de lujo..."
@@ -54,6 +54,13 @@
               <span class="d-none d-md-inline">Carrito</span>
             </a>
           </li>
+          {% if user.is_superuser %}
+            <li class="nav-item">
+              <a href="{% url 'estadisticas' %}" class="btn btn-warning fw-bold rounded-pill px-3 d-flex align-items-center gap-1">
+                <span class="d-none d-md-inline">Stats</span>
+              </a>
+            </li>
+          {% endif %}
           {% if user.is_authenticated %}
             <li class="nav-item">
               <span class="text-white-50 small px-2">Hola, <b>{{ user.username }}</b></span>

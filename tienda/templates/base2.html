@@ -9,7 +9,7 @@
   <source src="{% static 'videofondo.mp4' %}" type="video/mp4">
 </video>
 <div class="container my-4">
-  <h1 class="mb-4 text-center">Coches de {{ marca }}</h1>
+  <h1 class="mb-4 text-center text-white">Coches de {{ marca }}</h1>
 
   <!-- Filtros -->
   <form method="GET" action="" class="row g-3 mb-4">
@@ -20,6 +20,9 @@
           Modelo
         </button>
         <ul class="dropdown-menu" aria-labelledby="modeloDropdown">
+          <li>
+            <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'modelo' %}{{ key }}={{ value }}&{% endif %}{% endfor %}">Todos</a>
+          </li>
           {% for modelo in modelos %}
             <li>
               <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'modelo' %}{{ key }}={{ value }}&{% endif %}{% endfor %}modelo={{ modelo }}">
@@ -38,6 +41,9 @@
           Año mínimo
         </button>
         <ul class="dropdown-menu" aria-labelledby="añoMinDropdown">
+          <li>
+            <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}">Ninguno</a>
+          </li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=1980">1980</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=1990">1990</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_min=2000">2000</a></li>
@@ -54,6 +60,9 @@
           Año máximo
         </button>
         <ul class="dropdown-menu" aria-labelledby="añoMaxDropdown">
+          <li>
+            <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}">Ninguno</a>
+          </li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=1980">1980</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=1990">1990</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'año_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}año_max=2000">2000</a></li>
@@ -70,12 +79,14 @@
           Precio mínimo
         </button>
         <ul class="dropdown-menu" aria-labelledby="precioMinDropdown">
+          <li>
+            <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}">Nada</a>
+          </li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=50000">50,000</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=100000">100,000</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=150000">150,000</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=200000">200,000</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_min' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_min=250000">250,000</a></li>
-
         </ul>
       </div>
     </div>
@@ -87,6 +98,9 @@
           Precio máximo
         </button>
         <ul class="dropdown-menu" aria-labelledby="precioMaxDropdown">
+          <li>
+            <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}">Nada</a>
+          </li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=50000">50,000</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=100000">100,000</a></li>
           <li><a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'precio_max' %}{{ key }}={{ value }}&{% endif %}{% endfor %}precio_max=150000">150,000</a></li>
@@ -103,6 +117,9 @@
           País
         </button>
         <ul class="dropdown-menu" aria-labelledby="paisDropdown">
+          <li>
+            <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'pais' %}{{ key }}={{ value }}&{% endif %}{% endfor %}">Todos</a>
+          </li>
           {% for pais in paises %}
             <li>
               <a class="dropdown-item" href="?{% for key, value in request.GET.items %}{% if key != 'pais' %}{{ key }}={{ value }}&{% endif %}{% endfor %}pais={{ pais }}">
@@ -119,8 +136,8 @@
   <div class="row">
     {% for coche in coches %}
       <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <a href="{% url 'detalles_coche' coche.marca coche.id %}" class="text-decoration-none text-dark" style="text-decoration: none;">
+        <div class="card h-100 bg-dark bg-opacity-75 border-0" style="backdrop-filter: blur(2px);">
+          <a href="{% url 'detalles_coche' coche.marca coche.id %}" class="text-decoration-none text-warning" style="text-decoration: none;">
             {% if coche.imagen %}
               <img src="{{ coche.imagen.url }}" class="card-img-top" alt="{{ coche.modelo }}">
             {% else %}
