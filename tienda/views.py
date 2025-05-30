@@ -10,6 +10,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from collections import Counter
 from datetime import datetime, timedelta
+from django.contrib.auth.decorators import login_required
+
 import random
 
 def index(request):
@@ -132,7 +134,7 @@ def coches_por_marca(request, marca):
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Añadir un coche al carrito
-
+@login_required
 def add_to_cart(request, coche_id):
     coche = get_object_or_404(Coche, id=coche_id)
 
