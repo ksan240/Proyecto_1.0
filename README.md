@@ -23,16 +23,17 @@ CarSan Luxury es una plataforma web desarrollada con Django para la gestión y v
 
 ## Instalación rápida
 
-1. Clona el repositorio.
-2. Instala las dependencias:  
+1. Clona el repositorio:
+   `git clone https://github.com/ksan240/Proyecto_1.0.git`
+3. Instala las dependencias:  
    `pip install -r requirements.txt`
-3. Realiza las migraciones:  
+4. Realiza las migraciones:  
    `python manage.py migrate`
-4. (Opcional) Carga datos de ejemplo:  
+5. (Opcional) Carga datos de ejemplo:  
    `python manage.py loaddata data.json`
-5. Ejecuta el servidor:  
+6. Ejecuta el servidor:  
    `python manage.py runserver`
 
 ## Licencia
 
-Proyecto realizado como TFG. Uso educativo.
+Proyecto realizado por Carlos Santoyo como TFG.
